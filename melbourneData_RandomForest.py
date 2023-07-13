@@ -7,8 +7,7 @@ melbourneData = pd.read_csv('./melb_data.csv').dropna()
 print(melbourneData.columns)
 print('-----------')
 y = melbourneData.Price
-feats = ['Rooms', 'Bathroom', 'Landsize', 'BuildingArea',
-                        'YearBuilt', 'Lattitude', 'Longtitude']
+feats = ['Distance', 'Landsize', 'BuildingArea', 'YearBuilt', 'Lattitude', 'Longtitude']
 X = melbourneData[feats]
 
 train_X, test_X, train_y, test_y = train_test_split(X, y, random_state=0)
