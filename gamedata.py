@@ -14,14 +14,16 @@ def calculateKilo(col: Series, naReplacemane: int = 0) -> Series:
     return newcol
 
 
-def parseList(col: Series) -> Series:
+def parseList(col: Series, type: str) -> Series:
     newcol = col.apply(literal_eval)
 
-    return newcol
+    return newcol.apply(tuple).astype(type)
 
-
+print('Reading file')
 gameData = pd.read_csv('./backloggd_games.csv')
+gameData = gameData.drop(['Unnamed: 0', 'Summary'], axis=1)
 
+print('Parsing data')
 # preprocess abbreviated numeric values
 gameData.Plays = calculateKilo(gameData.Plays, 0)
 gameData.Playing = calculateKilo(gameData.Playing, 0)
@@ -31,8 +33,8 @@ gameData.Lists = calculateKilo(gameData.Lists, 0)
 gameData.Reviews = calculateKilo(gameData.Reviews, 0)
 
 # preprocess array-formed string to array of strings
-gameData.Developers = parseList(gameData.Developers)
-gameData.Platforms = parseList(gameData.Platforms)
-gameData.Genres = parseList(gameData.Genres)
+gameData.Developers = parseList(gameData.Developers, 'category')
+gameData.Platforms = parseList(gameData.Platforms, 'category')
+gameData.Genres = parseList(gameData.Genres, 'category')
 
-print(gameData.Developers[0][0])
+print(gameData.tail(20).Genres)
